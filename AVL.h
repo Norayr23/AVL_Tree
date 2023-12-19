@@ -1,3 +1,11 @@
+#ifndef AVL_H
+#define AVL_H
+
+#include <iostream>
+#include <queue>
+#include <stdexcept>
+#include <initializer_list>
+
 template <typename T>
 class AVL {
     struct Node {
@@ -79,6 +87,14 @@ public:
             throw std::logic_error("AVL is empty. Fail to get min value");
         }
         return getMin(m_root)->value;
+    }
+    const T& successorOf(const T& value) {
+        Node* res = getSuccessor(m_root, value);
+        return res ? res->value : value; // If not successor return same value
+    }
+    const T& predecessorOf(const T& value) {
+        Node* res = getPredecessor(m_root, value);
+        return res ? res->value : value; // If not successor return same value
     }
     bool search(const T& value) { return getNode(value, m_root); }
     constexpr size_t size() const { return m_size; }
@@ -304,6 +320,52 @@ private:
             }
         }
         return node;
+    }
+      static Node* getSuccessor(Node* root, const T& value) {
+        if (!root) {
+            return root;
+        }
+        Node* node = getNode(value, root);
+        if (!node) {
+            return node;
+        }
+        if (node->right) {
+            return getMin(node->right);
+        }
+        Node* successor = nullptr;
+        while (root->value != value) {
+            if (value > root->value) {
+                root = root->right;
+            }
+            else {
+                successor = root;
+                root = root->left;
+            }
+        }
+        return root ? successor : root;
+    }
+    static Node* getPredecessor(Node* root, const T& value) {
+        if (!root) {
+            return root;
+        }
+        Node* node = getNode(value, root);
+        if (!node) {
+            return node;
+        }
+        if (node->left) {
+            return getMax(node->left);
+        }
+        Node* predecessor = nullptr;
+        while (root->value != value) {
+            if (value > root->value) {
+                predecessor = root;
+                root = root->right;
+            }
+            else {
+                root = root->left;
+            }
+        }
+        return predecessor;
     }
     static void doClear(Node* node) {
          if (!node) {
