@@ -88,15 +88,15 @@ public:
         }
         return getMin(m_root)->value;
     }
-    const T& successorOf(const T& value) {
+    const T& successorOf(const T& value) const {
         Node* res = getSuccessor(m_root, value);
         return res ? res->value : value; // If not successor return same value
     }
-    const T& predecessorOf(const T& value) {
+    const T& predecessorOf(const T& value) const {
         Node* res = getPredecessor(m_root, value);
         return res ? res->value : value; // If not successor return same value
     }
-    bool search(const T& value) { return getNode(value, m_root); }
+    bool search(const T& value) const { return getNode(value, m_root); }
     constexpr size_t size() const { return m_size; }
     constexpr bool empty() const { return !m_size; }
     void printAllOrders() const {
